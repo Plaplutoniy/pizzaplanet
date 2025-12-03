@@ -35,7 +35,7 @@ async def post_rest(rest_: Restaraunt):
     return Restaraunt(**dict(row))
 
 @app.get("/restaurants/{id}/menu/", tags=["rest"])
-async def get_rest(id_: int):
+async def get_menu(id_: int):
     conn = await get_db()
     row_rest = await conn.fetchrow("SELECT name FROM restaraunts WHERE id = $1;", id_)
     row_chef = await conn.fetch("SELECT name FROM chefs WHERE restaraunt_id = $1;", id_)
@@ -73,7 +73,7 @@ async def get_pizza():
     return [pizza(**dict(row)) for row in rows]
 
 @app.get("/ingredients/{id_}", tags=["pizza"])
-async def get_pizza(id_: int):
+async def get_ingr(id_: int):
     conn = await get_db()
     row = await conn.fetch("SELECT name, ingr FROM pizzas WHERE id = $1", id_)
     await conn.close()
@@ -94,7 +94,7 @@ async def post_pizza(pizza_: pizza):
     return pizza(**dict(row))
 
 @app.put("/pizza/put/{id}", response_model=pizza, tags=["pizza"])
-async def post_pizza(pizza_: pizza, id_: int):
+async def put_pizza(pizza_: pizza, id_: int):
     conn = await get_db()
     row = await conn.fetchrow(
         """
@@ -116,7 +116,7 @@ async def post_pizza(pizza_: pizza, id_: int):
 
 
 @app.delete("/pizza/delete/{id_}", response_model=list[pizza], tags=["pizza"])
-async def get_pizza(id_: int):
+async def del_pizza(id_: int):
     conn = await get_db()
     rows = await conn.fetch("DELETE FROM pizzas WHERE id = $1", id_)
     await conn.close()
