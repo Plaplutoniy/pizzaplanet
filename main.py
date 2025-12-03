@@ -71,6 +71,13 @@ async def get_pizza():
     await conn.close()
     return [pizza(**dict(row)) for row in rows]
 
+@app.get("/ingredients/{id_}", tags=["pizza"])
+async def get_pizza(id_: int):
+    conn = await get_db()
+    row = await conn.fetch("SELECT name, ingr FROM pizzas WHERE id = $1", id_)
+    await conn.close()
+    return (row)
+
 @app.post("/pizza/post", response_model=pizza, tags=["pizza"])
 async def post_pizza(pizza_: pizza):
     conn = await get_db()
