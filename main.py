@@ -37,10 +37,11 @@ async def post_rest(rest_: Restaraunt):
 @app.get("/restaurants/{id}/menu/", tags=["rest"])
 async def get_rest(id_: int):
     conn = await get_db()
-    rows_rest = await conn.fetchrow("SELECT name FROM restaraunts WHERE id = $1;", id_)
-    rows_pizza = await conn.fetch("SELECT id, name, cheese, height, ingr, secret, restaraunt_id FROM pizzas WHERE restaraunt_id = $1;", id_)
+    row_rest = await conn.fetchrow("SELECT name FROM restaraunts WHERE id = $1;", id_)
+    row_chef = await conn.fetch("SELECT name FROM chefs WHERE restaraunt_id = $1;", id_)
+    row_pizza = await conn.fetch("SELECT id, name, cheese, height, ingr, secret, restaraunt_id FROM pizzas WHERE restaraunt_id = $1;", id_)
     await conn.close()
-    return [rows_rest, rows_pizza]
+    return [row_rest, row_chef, row_pizza]
 
 @app.get("/chef", response_model=list[chef], tags=["chef"])
 async def get_chef():
