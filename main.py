@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import asyncpg
+import uvicorn
 
 from db import host, user, password, db_name
 from models import Restaraunt, pizza, chef, review
@@ -144,3 +145,6 @@ async def post_review(review_: review):
     await conn.close()
     return review(**dict(row))
 
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0")
